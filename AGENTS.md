@@ -15,7 +15,8 @@ These rules apply to the entire repository.
   4. focused tests;
   5. documented artifacts/configuration identities; and
   6. its HITL approval recorded in the mapped issue.
-- Every implementation notebook must introduce each visible demonstration with an explanatory Markdown cell, followed by an executed code cell that prints a concise, deterministic result showing the utility of the implemented increment; assertions alone do not satisfy the visible-result requirement.
+- Every behavioral increment in an implementation notebook must be immediately followed by an explanatory Markdown cell and an executed code cell that prints a concise, deterministic demonstration of what the increment does and why it is useful.
+- Focused assertions/tests remain mandatory, but they never substitute for the printed demonstration. Do not leave an increment with only silent assertions, and do not propose a test-only notebook cell as its evidence.
 - Curated notebooks are authoritative. Never hand-edit generated modules; edit the notebook and regenerate with nbdev.
 - Canonical training runs from exported CLI code and never depends on live notebook state.
 
