@@ -1,0 +1,63 @@
+name: Progressive notebook implementation
+description: Implement one HITL notebook increment
+title: "[HITL] "
+labels:
+  - hitl
+  - implementation
+body:
+  - type: markdown
+    attributes:
+      value: |
+        One implementation issue must map to exactly one authoritative notebook and one human-approved deliverable.
+  - type: input
+    id: notebook
+    attributes:
+      label: Notebook
+      description: Exact authoritative notebook path.
+      placeholder: notebooks/NN_name.ipynb
+    validations:
+      required: true
+  - type: textarea
+    id: deliverable
+    attributes:
+      label: Deliverable
+      description: The complete observable capability this notebook adds.
+    validations:
+      required: true
+  - type: textarea
+    id: inputs
+    attributes:
+      label: Prior exports consumed
+      description: Symbols and artifacts imported from completed notebooks.
+    validations:
+      required: true
+  - type: textarea
+    id: outputs
+    attributes:
+      label: New exports and artifacts
+      description: Typed symbols, tests, reports, manifests, plots, or checkpoints owned by this notebook.
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Include visible result, tests, standalone behavior, and artifact identity.
+      placeholder: "- [ ] ..."
+    validations:
+      required: true
+  - type: textarea
+    id: forbidden
+    attributes:
+      label: Explicitly deferred scope
+      description: Later-notebook behavior that must not be implemented early.
+    validations:
+      required: true
+  - type: textarea
+    id: checkpoint
+    attributes:
+      label: Human checkpoint
+      description: Evidence the maintainer must review before approving the next notebook.
+      placeholder: "- [ ] Maintainer reviewed ..."
+    validations:
+      required: true

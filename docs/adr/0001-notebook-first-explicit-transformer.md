@@ -32,6 +32,8 @@ Do not use `torch.nn.Transformer`, its encoder/decoder layer classes, or PyTorch
 
 Use notebooks for bounded experiments, visualizations, tests, calibration, and the implementation narrative. Run canonical multi-session training from exported package/CLI code with explicit configuration, atomic checkpoints, and deterministic resume semantics.
 
+Build the implementation progressively rather than requiring a full architecture as the first tracer bullet. Each implementation issue owns exactly one notebook and one cumulative deliverable, as defined by [ADR 0002](0002-progressive-notebook-issues.md). The paper-to-project invariants are tracked in the [fidelity matrix](../fidelity-matrix.md).
+
 ## Rationale
 
 The explicit implementation is not incidental plumbing; it is the learning tool. Keeping equations, shape assertions, mask visualizations, attention maps, failure demonstrations, and code together makes architectural decisions inspectable.
@@ -64,6 +66,7 @@ Could improve throughput and memory use, but creates two numerical paths and wea
 - Experiments and visualizations stay adjacent to their implementation.
 - Exported modules and CLIs support testing, reuse, and robust long runs.
 - The project can distinguish exploratory state from a frozen canonical configuration.
+- Learners can inspect and approve each mechanism before it is composed into the next one.
 
 ### Negative
 
@@ -77,5 +80,5 @@ Could improve throughput and memory use, but creates two numerical paths and wea
 - Generated modules are never hand-edited.
 - CI regenerates exports and fails when committed outputs are stale.
 - The canonical run starts only from a content-hashed frozen configuration and manifest.
-- A tiny end-to-end tracer bullet proves export, CLI, checkpoint/restart, inference, and CPU Gradio behavior before WMT acquisition.
+- Progressive notebook slices prove each primitive before composition; the complete tiny-model tracer is reached only after embeddings, attention, encoder, and decoder notebooks are approved.
 - A future optimized attention path requires a separate ADR and must not silently replace the canonical implementation.
