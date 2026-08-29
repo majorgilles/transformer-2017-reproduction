@@ -6,6 +6,7 @@ These rules apply to the entire repository.
 
 - Exactly one implementation issue maps to exactly one authoritative notebook.
 - Implement notebooks in numeric order. Each notebook may import prior exports but must not implement the scope of a later notebook early.
+- Approved exception: ADR 0003 consolidates all WMT14 acquisition, sharding, manifests, and loading into notebook 01; notebook 13 and issue #14 are superseded.
 - Use fixtures, protocols, or minimal test doubles when a later component does not exist yet.
 - A notebook is complete only when it has:
   1. a stated learning goal and paper references;
@@ -30,11 +31,13 @@ These rules apply to the entire repository.
 
 - Type every Python function and method parameter and return value, including private helpers and tests where practical.
 - Type non-obvious class attributes.
-- Prefer dataclasses, `TypedDict`, `Protocol`, enums, and constrained aliases over unstructured dictionaries.
+- Use Pydantic v2 `BaseModel` for structured domain contracts, configuration, manifests, checkpoints, and values crossing trust boundaries.
+- Do not introduce standard-library dataclasses for those schemas. Reserve dataclasses for narrow internal records that require neither parsing nor serialization; prefer `TypedDict`, `Protocol`, enums, and constrained aliases where a runtime model is unnecessary.
+- Configure Pydantic models intentionally. Use frozen models for immutable identities, forbid unexpected fields at trust boundaries, and enable strict validation where coercion would hide invalid data.
 - Avoid `Any`, unchecked casts, and blanket suppressions. If unavoidable, use the narrowest scope and explain why.
 - A `# type: ignore` must include an error code and justification.
 - Treat tensor shapes, dtypes, devices, masks, token IDs, configuration, manifests, and checkpoint schemas as explicit contracts.
-- Validate all files loaded across trust boundaries.
+- Validate all files loaded across trust boundaries with the owning Pydantic model before use.
 - New or changed exports must pass the configured strict type checker.
 
 ## Formatting and linting
@@ -47,7 +50,8 @@ These rules apply to the entire repository.
 
 ## Testing
 
-- Add tests in the same notebook as each behavioral increment and export them through the chosen nbdev test topology.
+- Add tests in the same notebook as each behavioral increment and execute them through the nbdev notebook test topology.
+- Use plain assertions and explicit exception checks in notebooks; do not use pytest or pytest-specific helpers.
 - Test notebook behavior and standalone imported/CLI behavior.
 - Keep the license-safe fixture deterministic and fast.
 - Add shape, mask, finite-value, gradient, overfit, identity-mismatch, atomic-write, and process-restart tests as their owning notebooks are reached.

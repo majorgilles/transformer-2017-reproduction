@@ -7,7 +7,7 @@ The implementation is deliberately linear: one GitHub issue maps to one notebook
 | Issue | Notebook | Exit evidence |
 | --- | --- | --- |
 | #1 | `00_environment_contract.ipynb` | Locked native-Windows toolchain, CUDA diagnostics, nbdev export, strict checks |
-| #2 | `01_data_contracts_provenance.ipynb` | License-safe fixture, typed manifest/shard contracts, WMT rights matrix |
+| #2 | `01_data_contracts_provenance.ipynb` | Complete WMT14 train/dev acquisition, immutable shards, manifests, and loaders |
 | #3 | `02_shared_bpe.ipynb` | Shared BPE model, round trips, vocabulary report, stable hashes |
 
 ## M1 — Transformer from first principles
@@ -34,7 +34,7 @@ The implementation is deliberately linear: one GitHub issue maps to one notebook
 
 | Issue | Notebook | Exit evidence |
 | --- | --- | --- |
-| #14 | `13_wmt_pipeline.ipynb` | Approved deterministic WMT shards and tokenized manifests |
+| #14 | `13_wmt_pipeline.ipynb` | Superseded by #2 under ADR 0003; no implementation remains |
 | #15 | `14_gpu_calibration_freeze.ipynb` | 4070/CPU measurements and immutable canonical configuration |
 | #16 | `15_canonical_training.ipynb` | Completed resumable budget and validation-selected checkpoint |
 | #17 | `16_decoding_evaluation.ipynb` | Frozen decoding, final metrics, rubric, and error analysis |
@@ -49,7 +49,7 @@ The implementation is deliberately linear: one GitHub issue maps to one notebook
 
 ## Dependency policy
 
-The primary dependency chain is `#1 → #2 → … → #20`. This is intentionally optimized for learning rather than parallel throughput. A publication restriction does not block scientific v1: issues #18 and #19 can complete with an explicit stop/fallback outcome, allowing #20 to audit and release the reproducible scientific work.
+The primary dependency chain is `#1 → #2 → … → #20`, with issue #14 closed as superseded because ADR 0003 moved its data-pipeline scope into #2. This is intentionally optimized for learning rather than parallel throughput. A publication restriction does not block scientific v1: issues #18 and #19 can complete with an explicit stop/fallback outcome, allowing #20 to audit and release the reproducible scientific work.
 
 ## Definition of a progressive deliverable
 

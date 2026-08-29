@@ -2,7 +2,7 @@
 
 A progressive, notebook-first reproduction of the encoder-decoder Transformer from [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), scaled for English-to-German training on one RTX 4070 SUPER.
 
-> **Status:** planning scaffold. Each notebook is currently an empty, nbdev-aware outline. Implementation starts with [issue #1](https://github.com/majorgilles/transformer-2017-reproduction/issues/1).
+> **Status:** implementation in progress. The environment contract and complete WMT14 English-German data pipeline are implemented; shared BPE is next.
 
 ## Why this repository exists
 
@@ -57,7 +57,7 @@ The gate checks formatting, linting, strict typing, nbdev export freshness, note
 | Step | Notebook | GitHub issue | Deliverable |
 | ---: | --- | --- | --- |
 | 00 | `00_environment_contract.ipynb` | [#1](https://github.com/majorgilles/transformer-2017-reproduction/issues/1) | Locked Windows/CUDA/nbdev toolchain and diagnostics |
-| 01 | `01_data_contracts_provenance.ipynb` | [#2](https://github.com/majorgilles/transformer-2017-reproduction/issues/2) | License-safe fixture, manifest schema, and WMT rights matrix |
+| 01 | `01_data_contracts_provenance.ipynb` | [#2](https://github.com/majorgilles/transformer-2017-reproduction/issues/2) | Complete WMT14 train/dev acquisition, immutable shards, manifests, and loaders |
 | 02 | `02_shared_bpe.ipynb` | [#3](https://github.com/majorgilles/transformer-2017-reproduction/issues/3) | Shared BPE tokenizer with stable identity |
 | 03 | `03_embeddings_positions.ipynb` | [#4](https://github.com/majorgilles/transformer-2017-reproduction/issues/4) | Token embeddings and sinusoidal positional encoding |
 | 04 | `04_masks_scaled_attention.ipynb` | [#5](https://github.com/majorgilles/transformer-2017-reproduction/issues/5) | Padding/causal masks and explicit scaled attention |
@@ -69,7 +69,7 @@ The gate checks formatting, linting, strict typing, nbdev export freshness, note
 | 10 | `10_objective_optimizer_batching.ipynb` | [#11](https://github.com/majorgilles/transformer-2017-reproduction/issues/11) | Label smoothing, Adam schedule, token batching, and AMP |
 | 11 | `11_training_validation_cli.ipynb` | [#12](https://github.com/majorgilles/transformer-2017-reproduction/issues/12) | Standalone fixture training/validation CLI |
 | 12 | `12_checkpoint_resume.ipynb` | [#13](https://github.com/majorgilles/transformer-2017-reproduction/issues/13) | Atomic checkpoints, deterministic resume, and retention |
-| 13 | `13_wmt_pipeline.ipynb` | [#14](https://github.com/majorgilles/transformer-2017-reproduction/issues/14) | Approved WMT acquisition, filtering, sharding, and tokenization |
+| 13 | `13_wmt_pipeline.ipynb` | [#14](https://github.com/majorgilles/transformer-2017-reproduction/issues/14) | Superseded by notebook 01 under ADR 0003 |
 | 14 | `14_gpu_calibration_freeze.ipynb` | [#15](https://github.com/majorgilles/transformer-2017-reproduction/issues/15) | GPU/CPU benchmark and frozen canonical campaign |
 | 15 | `15_canonical_training.ipynb` | [#16](https://github.com/majorgilles/transformer-2017-reproduction/issues/16) | Resumable canonical run and validation selection |
 | 16 | `16_decoding_evaluation.ipynb` | [#17](https://github.com/majorgilles/transformer-2017-reproduction/issues/17) | Beam decoding, final metrics, and error analysis |
@@ -113,6 +113,7 @@ Before publishing weights, the project records every included WMT source and rev
 - [Progressive roadmap](docs/roadmap.md)
 - [ADR 0001: Notebook-first explicit implementation](docs/adr/0001-notebook-first-explicit-transformer.md)
 - [ADR 0002: One progressive issue per notebook](docs/adr/0002-progressive-notebook-issues.md)
+- [ADR 0003: Consolidate the WMT data pipeline in notebook 01](docs/adr/0003-consolidate-wmt-data-pipeline.md)
 - [Contributor and agent rules](AGENTS.md)
 
 ## Non-goals for v1

@@ -12,6 +12,7 @@ license = "MIT"
 authors = [{ name = "Gilles Major" }]
 dependencies = [
   "numpy>=2.2,<3",
+  "pydantic>=2.13.5",
   "torch==2.11.0",
 ]
 
@@ -20,6 +21,7 @@ Repository = "https://github.com/majorgilles/transformer-2017-reproduction"
 Issues = "https://github.com/majorgilles/transformer-2017-reproduction/issues"
 
 [project.scripts]
+transformer-data = "transformer_2017_reproduction.data:main"
 transformer-env = "transformer_2017_reproduction.environment:main"
 
 [dependency-groups]
@@ -28,7 +30,6 @@ dev = [
   "jupyterlab>=4.4,<5",
   "nbdev>=3.3,<4",
   "pyright>=1.1.400,<2",
-  "pytest>=8.4,<10",
   "ruff>=0.12,<1",
 ]
 
@@ -85,7 +86,3 @@ reportMissingTypeStubs = "warning"
 reportUnknownMemberType = "warning"
 reportUnknownVariableType = "warning"
 reportUnknownArgumentType = "warning"
-
-[tool.pytest.ini_options]
-addopts = "-q"
-testpaths = ["tests"]
