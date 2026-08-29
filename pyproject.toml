@@ -1,0 +1,91 @@
+[build-system]
+requires = ["hatchling>=1.28,<2"]
+build-backend = "hatchling.build"
+
+[project]
+name = "transformer-2017-reproduction"
+version = "0.1.0"
+description = "Notebook-first reproduction of the 2017 Transformer for English-to-German translation"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = "MIT"
+authors = [{ name = "Gilles Major" }]
+dependencies = [
+  "numpy>=2.2,<3",
+  "torch==2.11.0",
+]
+
+[project.urls]
+Repository = "https://github.com/majorgilles/transformer-2017-reproduction"
+Issues = "https://github.com/majorgilles/transformer-2017-reproduction/issues"
+
+[project.scripts]
+transformer-env = "transformer_2017_reproduction.environment:main"
+
+[dependency-groups]
+dev = [
+  "ipykernel>=6.30,<7",
+  "jupyterlab>=4.4,<5",
+  "nbdev>=3.3,<4",
+  "pyright>=1.1.400,<2",
+  "pytest>=8.4,<10",
+  "ruff>=0.12,<1",
+]
+
+[tool.uv]
+required-version = ">=0.12,<0.13"
+default-groups = ["dev"]
+environments = [
+  "sys_platform == 'win32'",
+  "sys_platform == 'linux'",
+]
+
+[tool.uv.sources]
+torch = [
+  { index = "pytorch-cu128", marker = "sys_platform == 'win32'" },
+  { index = "pytorch-cpu", marker = "sys_platform == 'linux'" },
+]
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["transformer_2017_reproduction"]
+
+[tool.nbdev]
+nbs_path = "notebooks"
+lib_path = "transformer_2017_reproduction"
+doc_path = "_docs"
+recursive = true
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+extend-exclude = ["transformer_2017_reproduction"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["transformer_2017_reproduction"]
+
+[tool.pyright]
+pythonVersion = "3.12"
+typeCheckingMode = "strict"
+include = ["transformer_2017_reproduction"]
+exclude = ["transformer_2017_reproduction/_modidx.py"]
+reportMissingTypeStubs = "warning"
+reportUnknownMemberType = "warning"
+reportUnknownVariableType = "warning"
+reportUnknownArgumentType = "warning"
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]

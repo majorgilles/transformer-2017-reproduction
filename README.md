@@ -34,6 +34,24 @@ Every implementation issue maps to exactly one notebook. A notebook must produce
 
 See [`docs/fidelity-matrix.md`](docs/fidelity-matrix.md) for the exact paper-to-project contract.
 
+## Environment setup
+
+The canonical development environment is native Windows with the RTX 4070 SUPER. Python and all dependencies are locked with `uv`; PyTorch is resolved from an explicit CUDA 12.8 wheel index on Windows and an explicit CPU index in Linux CI.
+
+```powershell
+uv sync --locked
+uv run transformer-env --json --require-canonical-gpu
+uv run jupyter lab
+```
+
+Run the complete native-Windows quality gate with:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/quality.ps1
+```
+
+The gate checks formatting, linting, strict typing, nbdev export freshness, notebook execution, and canonical GPU visibility. See [`notebooks/00_environment_contract.ipynb`](notebooks/00_environment_contract.ipynb) for the captured machine-readable diagnostics and rationale behind the pinned versions.
+
 ## Progressive notebook and issue map
 
 | Step | Notebook | GitHub issue | Deliverable |
