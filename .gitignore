@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+
+# Tool caches
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.pyright/
+.ruff_cache/
+.nbdime/
+
+# Local data and training artifacts
+data/
+checkpoints/
+runs/
+artifacts/
+cache/
+*.pt
+*.pth
+*.ckpt
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# Editors and OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
