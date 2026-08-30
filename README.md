@@ -2,24 +2,19 @@
 
 A progressive, notebook-first reproduction of the encoder-decoder Transformer from [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), scaled for English-to-German training on one RTX 4070 SUPER.
 
-> **Status:** implementation in progress. Environment, WMT14 data loading, and shared BPE are complete; token embeddings and sinusoidal positions are next.
+> **Status:** implementation in progress. Environment, WMT14 data loading, shared BPE, token embeddings, and sinusoidal positions are complete; the remaining Transformer model mechanics are next.
 
 ## Why this repository exists
 
 The model is the learning tool. Instead of starting with a complete Transformer or delegating it to `torch.nn.Transformer`, the repository builds one observable mechanism at a time:
 
-1. data and token identities;
-2. embeddings and positions;
-3. masking and scaled attention;
-4. multi-head attention;
-5. residual/post-norm blocks;
-6. encoder and decoder stacks;
-7. the complete model;
-8. optimization, training, and simple checkpoint resume;
-9. a calibrated WMT experiment; and
-10. evaluation and an educational online demo.
+1. establish data and token identities;
+2. build the complete Transformer in one cumulative, prerequisite-ordered notebook;
+3. add optimization, training, and simple checkpoint resume;
+4. run a calibrated WMT experiment; and
+5. evaluate honestly, with an optional educational online demo.
 
-Every implementation issue maps to exactly one notebook. Each notebook aims for the smallest readable implementation that teaches its concept: a short explanation, one visible result, a few focused assertions, and an export only when later notebooks need it.
+Each active implementation issue maps to one authoritative notebook. The complete model is intentionally consolidated so masks, attention, and decoder behavior are taught in the context that consumes them. Each section still uses a short explanation, visible result, focused assertions, and exports only where later work needs them.
 
 ## Project goals
 
@@ -70,23 +65,17 @@ During an ordinary concept notebook, run only the proportional checks relevant t
 | 00 | `00_environment_contract.ipynb` | [#1](https://github.com/majorgilles/transformer-2017-reproduction/issues/1) | Locked Windows/CUDA/nbdev toolchain and diagnostics |
 | 01 | `01_data_contracts_provenance.ipynb` | [#2](https://github.com/majorgilles/transformer-2017-reproduction/issues/2) | Complete WMT14 train/dev acquisition, immutable shards, manifests, and loaders |
 | 02 | `02_shared_bpe.ipynb` | [#3](https://github.com/majorgilles/transformer-2017-reproduction/issues/3) | Shared BPE tokenizer with stable identity |
-| 03 | `03_embeddings_positions.ipynb` | [#4](https://github.com/majorgilles/transformer-2017-reproduction/issues/4) | Token embeddings and sinusoidal positional encoding |
-| 04 | `04_masks_scaled_attention.ipynb` | [#5](https://github.com/majorgilles/transformer-2017-reproduction/issues/5) | Padding/causal masks and explicit scaled attention |
-| 05 | `05_multi_head_attention.ipynb` | [#6](https://github.com/majorgilles/transformer-2017-reproduction/issues/6) | Multi-head self- and cross-attention |
-| 06 | `06_ffn_residual_postnorm.ipynb` | [#7](https://github.com/majorgilles/transformer-2017-reproduction/issues/7) | ReLU FFN, dropout, residuals, and post-norm |
-| 07 | `07_encoder.ipynb` | [#8](https://github.com/majorgilles/transformer-2017-reproduction/issues/8) | Encoder layer and six-layer stack |
-| 08 | `08_decoder.ipynb` | [#9](https://github.com/majorgilles/transformer-2017-reproduction/issues/9) | Decoder layer and six-layer stack |
-| 09 | `09_full_transformer.ipynb` | [#10](https://github.com/majorgilles/transformer-2017-reproduction/issues/10) | Full Transformer, tying, tiny overfit, and greedy output |
-| 10 | `10_objective_optimizer_batching.ipynb` | [#11](https://github.com/majorgilles/transformer-2017-reproduction/issues/11) | Label smoothing, Noam schedule, and simple token-budget batching |
-| 11 | `11_training_validation_cli.ipynb` | [#12](https://github.com/majorgilles/transformer-2017-reproduction/issues/12) | Minimal fresh-process fixture training and validation |
-| 12 | `12_checkpoint_resume.ipynb` | [#13](https://github.com/majorgilles/transformer-2017-reproduction/issues/13) | Simple checkpoint save/load and restart |
-| 13 | `13_wmt_pipeline.ipynb` | [#14](https://github.com/majorgilles/transformer-2017-reproduction/issues/14) | Superseded by notebook 01 under ADR 0003 |
-| 14 | `14_gpu_calibration_freeze.ipynb` | [#15](https://github.com/majorgilles/transformer-2017-reproduction/issues/15) | Short GPU benchmark and scaled campaign choice |
-| 15 | `15_canonical_training.ipynb` | [#16](https://github.com/majorgilles/transformer-2017-reproduction/issues/16) | Bounded training run and validation selection |
-| 16 | `16_decoding_evaluation.ipynb` | [#17](https://github.com/majorgilles/transformer-2017-reproduction/issues/17) | Frozen decoding, final metrics, and a small qualitative sample |
-| 17 | `17_huggingface_package.ipynb` | [#18](https://github.com/majorgilles/transformer-2017-reproduction/issues/18) | **Optional:** minimal inference package/model card |
-| 18 | `18_gradio_space.ipynb` | [#19](https://github.com/majorgilles/transformer-2017-reproduction/issues/19) | **Optional:** small Gradio demonstration |
-| 19 | `19_reproducibility_release.ipynb` | [#20](https://github.com/majorgilles/transformer-2017-reproduction/issues/20) | **Optional:** concise release summary |
+| 03 | `03_transformer.ipynb` | [#5](https://github.com/majorgilles/transformer-2017-reproduction/issues/5) | Complete Transformer mechanics, tiny overfit, and greedy output; consolidates #4–#10 |
+| 04 | `04_objective_optimizer_batching.ipynb` | [#11](https://github.com/majorgilles/transformer-2017-reproduction/issues/11) | Label smoothing, Noam schedule, and simple token-budget batching |
+| 05 | `05_training_validation_cli.ipynb` | [#12](https://github.com/majorgilles/transformer-2017-reproduction/issues/12) | Minimal fresh-process fixture training and validation |
+| 06 | `06_checkpoint_resume.ipynb` | [#13](https://github.com/majorgilles/transformer-2017-reproduction/issues/13) | Simple checkpoint save/load and restart |
+| — | — | [#14](https://github.com/majorgilles/transformer-2017-reproduction/issues/14) | Superseded by notebook 01 under ADR 0003 |
+| 07 | `07_gpu_calibration_freeze.ipynb` | [#15](https://github.com/majorgilles/transformer-2017-reproduction/issues/15) | Short GPU benchmark and scaled campaign choice |
+| 08 | `08_canonical_training.ipynb` | [#16](https://github.com/majorgilles/transformer-2017-reproduction/issues/16) | Bounded training run and validation selection |
+| 09 | `09_decoding_evaluation.ipynb` | [#17](https://github.com/majorgilles/transformer-2017-reproduction/issues/17) | Frozen decoding, final metrics, and a small qualitative sample |
+| 10 | `10_huggingface_package.ipynb` | [#18](https://github.com/majorgilles/transformer-2017-reproduction/issues/18) | **Optional:** minimal inference package/model card |
+| 11 | `11_gradio_space.ipynb` | [#19](https://github.com/majorgilles/transformer-2017-reproduction/issues/19) | **Optional:** small Gradio demonstration |
+| 12 | `12_reproducibility_release.ipynb` | [#20](https://github.com/majorgilles/transformer-2017-reproduction/issues/20) | **Optional:** concise release summary |
 
 The detailed milestone plan is in [`docs/roadmap.md`](docs/roadmap.md).
 
@@ -121,6 +110,7 @@ Hugging Face packaging, a Gradio demo, and a formal release audit are optional s
 - [ADR 0002: One progressive issue per notebook](docs/adr/0002-progressive-notebook-issues.md)
 - [ADR 0003: Consolidate the WMT data pipeline in notebook 01](docs/adr/0003-consolidate-wmt-data-pipeline.md)
 - [ADR 0004: Prefer pedagogical simplicity](docs/adr/0004-pedagogical-simplicity.md)
+- [ADR 0005: Consolidate Transformer mechanics into one model notebook](docs/adr/0005-consolidate-transformer-model-notebook.md)
 - [Contributor and agent rules](AGENTS.md)
 
 ## Non-goals for v1

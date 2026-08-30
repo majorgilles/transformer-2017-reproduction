@@ -1,10 +1,11 @@
 # ADR 0002: Map one progressive implementation issue to one notebook
 
-- **Status:** Accepted
+- **Status:** Superseded for model scope by [ADR 0005](0005-consolidate-transformer-model-notebook.md)
 - **Date:** 2026-08-29
 - **Decision owners:** Repository maintainer
 - **Related:** [ADR 0001](0001-notebook-first-explicit-transformer.md), [ADR 0004](0004-pedagogical-simplicity.md), [roadmap](../roadmap.md)
 - **Amended by:** ADR 0004 replaces evidence dossiers and production-oriented completion criteria with proportional pedagogical evidence
+- **Superseded by:** ADR 0005 consolidates former model notebooks 03–09 and issues #4–#10 into one notebook and issue
 
 ## Context
 

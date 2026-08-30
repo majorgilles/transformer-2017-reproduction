@@ -10,11 +10,12 @@ These rules apply to the entire repository.
 - Add robustness only when robustness is the notebook's learning topic or is necessary to complete the bounded training experiment.
 - Do not build infrastructure for hypothetical future requirements.
 
-## Progressive source of truth
+## Notebook source of truth
 
-- Exactly one implementation issue maps to exactly one authoritative notebook.
+- Exactly one active implementation issue maps to exactly one authoritative notebook.
 - Implement notebooks in numeric order. A notebook may import prior exports but must not implement later scope early.
-- Approved exception: ADR 0003 consolidates WMT14 acquisition and loading into notebook 01; notebook 13 and issue #14 are superseded.
+- ADR 0005 consolidates model mechanics formerly split across notebooks 03–09 and issues #4–#10 into `03_transformer.ipynb` / issue #5. Teach that notebook in prerequisite-ordered sections and keep optimizer/training scope in later notebooks.
+- ADR 0003 consolidates WMT14 acquisition and loading into notebook 01; issue #14 has no notebook.
 - Curated notebooks are authoritative. Edit notebooks and regenerate exports with nbdev; do not hand-edit generated modules.
 - Export code only when a later notebook or the bounded training command needs it.
 - Use fixtures or minimal test doubles when a later component does not exist.

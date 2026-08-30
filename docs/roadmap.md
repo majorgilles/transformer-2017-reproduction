@@ -1,6 +1,9 @@
-# Progressive implementation roadmap
+# Consolidated implementation roadmap
 
-The implementation is deliberately linear: one GitHub issue maps to one notebook and one understandable learning increment. Later notebooks import earlier exports instead of recreating them. The goal is the smallest readable implementation that demonstrates each paper concept—not production infrastructure.
+The implementation is notebook-first and ordered by prerequisites. Transformer model
+mechanics now live in one cumulative notebook so each tensor interface is introduced
+beside the real encoder/decoder path that consumes it. See
+[ADR 0005](adr/0005-consolidate-transformer-model-notebook.md).
 
 ## M0 — Foundation and data contracts
 
@@ -10,58 +13,62 @@ The implementation is deliberately linear: one GitHub issue maps to one notebook
 | #2 | `01_data_contracts_provenance.ipynb` | Reusable WMT14 train/dev loader and visible fixture |
 | #3 | `02_shared_bpe.ipynb` | Shared BPE model, round trips, and vocabulary evidence |
 
-## M1 — Transformer from first principles
+## M1 — Complete Transformer from first principles
 
 | Issue | Notebook | Exit evidence |
 | --- | --- | --- |
-| #4 | `03_embeddings_positions.ipynb` | Embedding scale and sinusoidal-position plots/tests |
-| #5 | `04_masks_scaled_attention.ipynb` | Correct causal/padding masks and explicit single-head attention |
-| #6 | `05_multi_head_attention.ipynb` | Multi-head self/cross-attention equivalence and shape tests |
-| #7 | `06_ffn_residual_postnorm.ipynb` | ReLU FFN and paper-faithful post-norm block |
-| #8 | `07_encoder.ipynb` | One encoder layer and configurable six-layer stack |
-| #9 | `08_decoder.ipynb` | Masked decoder layer, cross-attention, and six-layer stack |
-| #10 | `09_full_transformer.ipynb` | Full model, initialization/tying, tiny overfit, greedy output |
+| #5 | `03_transformer.ipynb` | Embeddings, masks, explicit multi-head attention, post-norm encoder/decoder stacks, tied full model, tiny overfit, and greedy output |
+
+Issue #4's completed embedding/position work is retained as the opening section of
+notebook 03. Issues #6–#10 are consolidated into #5 under ADR 0005.
 
 ## M2 — Training mechanics
 
 | Issue | Notebook | Exit evidence |
 | --- | --- | --- |
-| #11 | `10_objective_optimizer_batching.ipynb` | Label smoothing, Noam schedule, and a simple token-budget batch example; AMP only if needed |
-| #12 | `11_training_validation_cli.ipynb` | Minimal fresh-process train/validate command and learning curve |
-| #13 | `12_checkpoint_resume.ipynb` | Simple checkpoint save/load and short restart comparison |
+| #11 | `04_objective_optimizer_batching.ipynb` | Label smoothing, Noam schedule, and a simple token-budget batch example; AMP only if needed |
+| #12 | `05_training_validation_cli.ipynb` | Minimal fresh-process train/validate command and learning curve |
+| #13 | `06_checkpoint_resume.ipynb` | Simple checkpoint save/load and short restart comparison |
 
 ## M3 — Canonical WMT experiment
 
+Issue #14 remains superseded by #2 under ADR 0003; it has no notebook.
+
 | Issue | Notebook | Exit evidence |
 | --- | --- | --- |
-| #14 | `13_wmt_pipeline.ipynb` | Superseded by #2 under ADR 0003; no implementation remains |
-| #15 | `14_gpu_calibration_freeze.ipynb` | One short GPU benchmark and a documented scaled training choice |
-| #16 | `15_canonical_training.ipynb` | Training/validation curves and a validation-selected checkpoint |
-| #17 | `16_decoding_evaluation.ipynb` | Frozen decoding choice, final metrics, and a small qualitative sample |
+| #15 | `07_gpu_calibration_freeze.ipynb` | One short GPU benchmark and a documented scaled training choice |
+| #16 | `08_canonical_training.ipynb` | Training/validation curves and a validation-selected checkpoint |
+| #17 | `09_decoding_evaluation.ipynb` | Frozen decoding choice, final metrics, and a small qualitative sample |
 
 ## M4 — Optional publication extensions
 
-These issues are optional and must not add complexity to the core educational implementation.
+These issues are optional and must not add complexity to the core educational
+implementation.
 
 | Issue | Notebook | Exit evidence |
 | --- | --- | --- |
-| #18 | `17_huggingface_package.ipynb` | Optional minimal inference package/model card, if publication is desired and allowed |
-| #19 | `18_gradio_space.ipynb` | Optional tiny Gradio demonstration |
-| #20 | `19_reproducibility_release.ipynb` | Optional concise release summary and clean-checkout spot check |
+| #18 | `10_huggingface_package.ipynb` | Optional minimal inference package/model card, if publication is desired and allowed |
+| #19 | `11_gradio_space.ipynb` | Optional tiny educational interface |
+| #20 | `12_reproducibility_release.ipynb` | Optional concise release summary and clean-checkout spot check |
 
 ## Dependency policy
 
-The core learning chain is `#1 → #2 → … → #17`, with issue #14 closed as superseded because ADR 0003 moved its data-pipeline scope into #2. Issues #18–#20 are independent optional extensions after the core reproduction. Publication is not required to call the educational reproduction complete.
+The active core chain is `#1 → #2 → #3 → #5 → #11 → #12 → #13 → #15 → #16 → #17`.
+Issue #14 is closed as superseded because ADR 0003 moved its data-pipeline scope into
+#2. Issues #18–#20 are independent optional extensions after core evaluation.
 
-## Definition of a progressive deliverable
+## Definition of a notebook deliverable
 
-Every core issue identifies:
+Every active notebook identifies:
 
-- its single notebook and learning goal;
-- prior exports it consumes;
-- the smallest implementation needed for the concept;
-- one visible deterministic result;
-- a few focused assertions; and
+- its learning goal and relevant paper equation or section;
+- the simplest direct implementation;
+- one or more visible deterministic examples appropriate to its scope;
+- focused assertions for central behavior;
+- exports only where later notebooks need them; and
 - explicitly deferred future scope.
 
-Exports are listed only when later notebooks need them. Artifact identities, CLIs, runtime schemas, and human approval dossiers are required only when they are intrinsic to the lesson or a consequential project gate.
+The consolidated model notebook uses these criteria per major section and adds a final
+integrated tiny-overfit check. Artifact identities, CLIs, runtime schemas, and human
+approval dossiers remain required only when intrinsic to the lesson or a consequential
+project gate.

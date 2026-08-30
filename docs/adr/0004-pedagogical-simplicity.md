@@ -53,4 +53,4 @@ Reserve explicit maintainer gates for consequential decisions: paper-fidelity ch
 
 ## Superseded expectations
 
-This ADR narrows production-oriented language in ADR 0001 and ADR 0002 where it conflicts with the pedagogical goal. The notebook-first source of truth, progressive one-issue/one-notebook map, and explicit Transformer implementation remain in force.
+This ADR narrows production-oriented language in ADR 0001 and ADR 0002 where it conflicts with the pedagogical goal. The notebook-first source of truth and explicit Transformer implementation remain in force. ADR 0005 later consolidates the former model issues/notebooks into one cumulative model notebook while preserving prerequisite-ordered sections.
