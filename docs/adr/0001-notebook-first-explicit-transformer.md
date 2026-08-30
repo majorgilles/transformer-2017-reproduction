@@ -4,6 +4,7 @@
 - **Date:** 2026-08-29
 - **Decision owners:** Repository maintainer
 - **Related research:** [External Transformer research notebook](https://notebook.google.com/notebook/30e666fd-ac85-43dd-ab31-b3c8627e7b4d)
+- **Amended by:** [ADR 0004](0004-pedagogical-simplicity.md), which narrows production-hardening requirements while preserving notebook-first explicit implementation
 
 ## Context
 

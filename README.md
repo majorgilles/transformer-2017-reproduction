@@ -2,7 +2,7 @@
 
 A progressive, notebook-first reproduction of the encoder-decoder Transformer from [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), scaled for English-to-German training on one RTX 4070 SUPER.
 
-> **Status:** implementation in progress. The environment contract and complete WMT14 English-German data pipeline are implemented; shared BPE is next.
+> **Status:** implementation in progress. Environment, WMT14 data loading, and shared BPE are complete; token embeddings and sinusoidal positions are next.
 
 ## Why this repository exists
 
@@ -15,22 +15,33 @@ The model is the learning tool. Instead of starting with a complete Transformer 
 5. residual/post-norm blocks;
 6. encoder and decoder stacks;
 7. the complete model;
-8. optimization, training, and exact resume;
+8. optimization, training, and simple checkpoint resume;
 9. a calibrated WMT experiment; and
 10. evaluation and an educational online demo.
 
-Every implementation issue maps to exactly one notebook. A notebook must produce a visible result, exported typed code, tests, and a human-approved checkpoint before the next notebook begins.
+Every implementation issue maps to exactly one notebook. Each notebook aims for the smallest readable implementation that teaches its concept: a short explanation, one visible result, a few focused assertions, and an export only when later notebooks need it.
 
 ## Project goals
 
+- Make each important equation and tensor transformation understandable in a notebook.
 - Preserve the original six-encoder/six-decoder topology and core 2017 mechanics.
 - Implement attention and Transformer blocks explicitly in PyTorch.
 - Keep the canonical path free of `torch.nn.Transformer`, built-in encoder/decoder layers, and fused scaled-dot-product attention.
-- Scale dimensions, vocabulary, sequence length, corpus size, and token budget only through documented configuration.
-- Support deliberate interruption and validated process-restart resume.
-- Train within a 24–48 GPU-hour campaign after benchmarking the target RTX 4070 SUPER.
-- Evaluate on untouched WMT test data only after validation-based checkpoint selection is frozen.
-- Publish eligible inference weights and a CPU-safe Gradio demo after source-rights review.
+- Use small deterministic examples, plots, and a tiny overfit before attempting WMT training.
+- Scale dimensions and training budget to the available RTX 4070 SUPER without pretending to reproduce the paper's compute budget.
+- Evaluate honestly on untouched WMT test data only after development choices are finished.
+
+## Simplicity policy
+
+This repository is educational, not production infrastructure. The default is direct code and proportional evidence:
+
+- one clear implementation per concept;
+- one visible example, table, or plot;
+- usually two to five assertions covering the central behavior;
+- simple Python containers unless runtime validation is genuinely needed; and
+- no metadata schema, hash, serializer, CLI, or deployment layer unless that mechanism is itself being taught or is required for the bounded experiment.
+
+Full quality and reproducibility checks are milestone gates, not a reason to surround every notebook concept with production machinery. See [ADR 0004](docs/adr/0004-pedagogical-simplicity.md).
 
 See [`docs/fidelity-matrix.md`](docs/fidelity-matrix.md) for the exact paper-to-project contract.
 
@@ -44,13 +55,13 @@ uv run transformer-env --json --require-canonical-gpu
 uv run jupyter lab
 ```
 
-Run the complete native-Windows quality gate with:
+At milestone boundaries, run the complete native-Windows quality gate with:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts/quality.ps1
 ```
 
-The gate checks formatting, linting, strict typing, nbdev export freshness, notebook execution, and canonical GPU visibility. See [`notebooks/00_environment_contract.ipynb`](notebooks/00_environment_contract.ipynb) for the captured machine-readable diagnostics and rationale behind the pinned versions.
+During an ordinary concept notebook, run only the proportional checks relevant to the changed code: formatting/linting, export regeneration when needed, top-to-bottom execution, and focused assertions. See [`notebooks/00_environment_contract.ipynb`](notebooks/00_environment_contract.ipynb) for the environment setup.
 
 ## Progressive notebook and issue map
 
@@ -66,42 +77,37 @@ The gate checks formatting, linting, strict typing, nbdev export freshness, note
 | 07 | `07_encoder.ipynb` | [#8](https://github.com/majorgilles/transformer-2017-reproduction/issues/8) | Encoder layer and six-layer stack |
 | 08 | `08_decoder.ipynb` | [#9](https://github.com/majorgilles/transformer-2017-reproduction/issues/9) | Decoder layer and six-layer stack |
 | 09 | `09_full_transformer.ipynb` | [#10](https://github.com/majorgilles/transformer-2017-reproduction/issues/10) | Full Transformer, tying, tiny overfit, and greedy output |
-| 10 | `10_objective_optimizer_batching.ipynb` | [#11](https://github.com/majorgilles/transformer-2017-reproduction/issues/11) | Label smoothing, Adam schedule, token batching, and AMP |
-| 11 | `11_training_validation_cli.ipynb` | [#12](https://github.com/majorgilles/transformer-2017-reproduction/issues/12) | Standalone fixture training/validation CLI |
-| 12 | `12_checkpoint_resume.ipynb` | [#13](https://github.com/majorgilles/transformer-2017-reproduction/issues/13) | Atomic checkpoints, deterministic resume, and retention |
+| 10 | `10_objective_optimizer_batching.ipynb` | [#11](https://github.com/majorgilles/transformer-2017-reproduction/issues/11) | Label smoothing, Noam schedule, and simple token-budget batching |
+| 11 | `11_training_validation_cli.ipynb` | [#12](https://github.com/majorgilles/transformer-2017-reproduction/issues/12) | Minimal fresh-process fixture training and validation |
+| 12 | `12_checkpoint_resume.ipynb` | [#13](https://github.com/majorgilles/transformer-2017-reproduction/issues/13) | Simple checkpoint save/load and restart |
 | 13 | `13_wmt_pipeline.ipynb` | [#14](https://github.com/majorgilles/transformer-2017-reproduction/issues/14) | Superseded by notebook 01 under ADR 0003 |
-| 14 | `14_gpu_calibration_freeze.ipynb` | [#15](https://github.com/majorgilles/transformer-2017-reproduction/issues/15) | GPU/CPU benchmark and frozen canonical campaign |
-| 15 | `15_canonical_training.ipynb` | [#16](https://github.com/majorgilles/transformer-2017-reproduction/issues/16) | Resumable canonical run and validation selection |
-| 16 | `16_decoding_evaluation.ipynb` | [#17](https://github.com/majorgilles/transformer-2017-reproduction/issues/17) | Beam decoding, final metrics, and error analysis |
-| 17 | `17_huggingface_package.ipynb` | [#18](https://github.com/majorgilles/transformer-2017-reproduction/issues/18) | Safe inference package, model card, and publication decision |
-| 18 | `18_gradio_space.ipynb` | [#19](https://github.com/majorgilles/transformer-2017-reproduction/issues/19) | Public Space or documented local fallback |
-| 19 | `19_reproducibility_release.ipynb` | [#20](https://github.com/majorgilles/transformer-2017-reproduction/issues/20) | Clean-machine audit and v1 sign-off |
+| 14 | `14_gpu_calibration_freeze.ipynb` | [#15](https://github.com/majorgilles/transformer-2017-reproduction/issues/15) | Short GPU benchmark and scaled campaign choice |
+| 15 | `15_canonical_training.ipynb` | [#16](https://github.com/majorgilles/transformer-2017-reproduction/issues/16) | Bounded training run and validation selection |
+| 16 | `16_decoding_evaluation.ipynb` | [#17](https://github.com/majorgilles/transformer-2017-reproduction/issues/17) | Frozen decoding, final metrics, and a small qualitative sample |
+| 17 | `17_huggingface_package.ipynb` | [#18](https://github.com/majorgilles/transformer-2017-reproduction/issues/18) | **Optional:** minimal inference package/model card |
+| 18 | `18_gradio_space.ipynb` | [#19](https://github.com/majorgilles/transformer-2017-reproduction/issues/19) | **Optional:** small Gradio demonstration |
+| 19 | `19_reproducibility_release.ipynb` | [#20](https://github.com/majorgilles/transformer-2017-reproduction/issues/20) | **Optional:** concise release summary |
 
 The detailed milestone plan is in [`docs/roadmap.md`](docs/roadmap.md).
 
-## Reproducibility contract
+## Reproducibility boundary
 
-Training checkpoints will preserve model, optimizer, scheduler/scaler, random-number-generator states, counters, configuration/code identity, tokenizer identity, data-manifest identity, shard order, sampler state, and a declared deterministic cursor or boundary. Corpus shards remain immutable and external to checkpoints. Resume must fail on identity mismatch rather than silently switching state or data.
+The existing data manifest and frozen tokenizer identify the corpus boundary. Training checkpoints should preserve the model, optimizer, mixed-precision scaler when used, training step, and random state needed to continue the bounded experiment. The checkpoint notebook will demonstrate a simple save/load and restart comparison; production retention managers and exhaustive identity graphs are not required.
 
-The intended local storage envelope is 50–100 GB. Rolling retention keeps the latest three resumable checkpoints, the best validation checkpoint, and sparse milestones while protecting every referenced shard.
-
-Public inference artifacts are separate from resumable training checkpoints. The intended Hub format is `safetensors` plus non-executable configuration/tokenizer files; optimizer and RNG state remain private.
+WMT text, private checkpoints, credentials, and caches remain local. If weights are published, inference artifacts remain separate from resumable training state.
 
 ## Evaluation contract
 
 The scaled reproduction targets:
 
-- approximately SacreBLEU 10 or better on untouched WMT `newstest2014`, with the full signature;
-- a frozen chrF improvement over declared trivial baselines; and
-- at least 12 of 20 fixed final examples preserving core meaning without critical number or negation errors.
+- report SacreBLEU and chrF honestly on untouched WMT `newstest2014`; and
+- inspect a small fixed qualitative sample for obvious successes and failures.
 
 `newstest2013` is the development set. Final-test access occurs only after checkpoint selection and decoding settings are frozen. These are project targets, not a promise to match the paper's BLEU.
 
-## Hugging Face publication
+## Optional publication extensions
 
-The intended release is a public model repository and CPU-safe Gradio Space. Calibration includes CPU RAM, artifact-size, cold-start, and latency budgets—not only GPU training throughput. No corpus text is uploaded.
-
-Before publishing weights, the project records every included WMT source and reviews its terms. If a concrete restriction blocks publication, the scientific v1 can still complete: the repository produces a local inference package and documented publication stop instead of deadlocking the release.
+Hugging Face packaging, a Gradio demo, and a formal release audit are optional stretch goals after the educational reproduction and honest evaluation are complete. They must not drive production-oriented abstractions into the core learning notebooks. No corpus text is uploaded, and any public weight release still requires a source-rights review.
 
 ## External research notebook
 
@@ -114,6 +120,7 @@ Before publishing weights, the project records every included WMT source and rev
 - [ADR 0001: Notebook-first explicit implementation](docs/adr/0001-notebook-first-explicit-transformer.md)
 - [ADR 0002: One progressive issue per notebook](docs/adr/0002-progressive-notebook-issues.md)
 - [ADR 0003: Consolidate the WMT data pipeline in notebook 01](docs/adr/0003-consolidate-wmt-data-pipeline.md)
+- [ADR 0004: Prefer pedagogical simplicity](docs/adr/0004-pedagogical-simplicity.md)
 - [Contributor and agent rules](AGENTS.md)
 
 ## Non-goals for v1

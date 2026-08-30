@@ -3,7 +3,8 @@
 - **Status:** Accepted
 - **Date:** 2026-08-29
 - **Decision owners:** Repository maintainer
-- **Related:** [ADR 0001](0001-notebook-first-explicit-transformer.md), [roadmap](../roadmap.md)
+- **Related:** [ADR 0001](0001-notebook-first-explicit-transformer.md), [ADR 0004](0004-pedagogical-simplicity.md), [roadmap](../roadmap.md)
+- **Amended by:** ADR 0004 replaces evidence dossiers and production-oriented completion criteria with proportional pedagogical evidence
 
 ## Context
 
