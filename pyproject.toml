@@ -29,6 +29,7 @@ transformer-env = "transformer_2017_reproduction.environment:main"
 dev = [
   "ipykernel>=6.30,<7",
   "jupyterlab>=4.4,<5",
+  "matplotlib>=3.10,<4",
   "nbdev>=3.3,<4",
   "pyright>=1.1.400,<2",
   "ruff>=0.12,<1",
