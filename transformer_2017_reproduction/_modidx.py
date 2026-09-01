@@ -172,4 +172,12 @@ d = { 'settings': { 'branch': 'main',
                                                             'transformer_2017_reproduction.tokenization.train_bpe': ( 'shared_bpe.html#train_bpe',
                                                                                                                       'transformer_2017_reproduction/tokenization.py'),
                                                             'transformer_2017_reproduction.tokenization.write_tokenizer_artifact': ( 'shared_bpe.html#write_tokenizer_artifact',
-                                                                                                                                     'transformer_2017_reproduction/tokenization.py')}}}
+                                                                                                                                     'transformer_2017_reproduction/tokenization.py')},
+            'transformer_2017_reproduction.training': { 'transformer_2017_reproduction.training._fixture_training_curve': ( 'training_validation_cli.html#_fixture_training_curve',
+                                                                                                                            'transformer_2017_reproduction/training.py'),
+                                                        'transformer_2017_reproduction.training.main': ( 'training_validation_cli.html#main',
+                                                                                                         'transformer_2017_reproduction/training.py'),
+                                                        'transformer_2017_reproduction.training.train': ( 'training_validation_cli.html#train',
+                                                                                                          'transformer_2017_reproduction/training.py'),
+                                                        'transformer_2017_reproduction.training.validate': ( 'training_validation_cli.html#validate',
+                                                                                                             'transformer_2017_reproduction/training.py')}}}
