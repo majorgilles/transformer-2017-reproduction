@@ -24,7 +24,6 @@ Issues = "https://github.com/majorgilles/transformer-2017-reproduction/issues"
 [project.scripts]
 transformer-data = "transformer_2017_reproduction.data:main"
 transformer-env = "transformer_2017_reproduction.environment:main"
-transformer-train = "transformer_2017_reproduction.training:main"
 
 [dependency-groups]
 dev = [
