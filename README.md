@@ -2,7 +2,7 @@
 
 A progressive, notebook-first reproduction of the encoder-decoder Transformer from [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), scaled for English-to-German training on one RTX 4070 SUPER.
 
-> **Status:** implementation in progress. Environment, WMT14 data loading, shared BPE, the complete Transformer model, objective/optimization mechanics, and fixture training/validation are complete; checkpoint resume is next.
+> **Status:** implementation in progress. Environment, WMT14 data loading, shared BPE, the complete Transformer model, objective/optimization mechanics, fixture training/validation, and minimal checkpoint resume are complete; GPU calibration is next.
 
 ## Why this repository exists
 
@@ -67,7 +67,7 @@ During an ordinary concept notebook, run only the proportional checks relevant t
 | 02 | `02_shared_bpe.ipynb` | [#3](https://github.com/majorgilles/transformer-2017-reproduction/issues/3) | Shared BPE tokenizer with stable identity |
 | 03 | `03_transformer.ipynb` | [#5](https://github.com/majorgilles/transformer-2017-reproduction/issues/5) | Complete Transformer mechanics, tiny overfit, and greedy output; consolidates #4–#10 |
 | 04 | `04_objective_optimizer_batching.ipynb` | [#11](https://github.com/majorgilles/transformer-2017-reproduction/issues/11) | Label smoothing, Noam schedule, and simple token-budget batching |
-| 05 | `05_training_validation_cli.ipynb` | [#12](https://github.com/majorgilles/transformer-2017-reproduction/issues/12) | Minimal fresh-process fixture training and validation |
+| 05 | `05_training_validation_cli.ipynb` | [#12](https://github.com/majorgilles/transformer-2017-reproduction/issues/12) | Minimal fixture training and validation |
 | 06 | `06_checkpoint_resume.ipynb` | [#13](https://github.com/majorgilles/transformer-2017-reproduction/issues/13) | Simple checkpoint save/load and restart |
 | — | — | [#14](https://github.com/majorgilles/transformer-2017-reproduction/issues/14) | Superseded by notebook 01 under ADR 0003 |
 | 07 | `07_gpu_calibration_freeze.ipynb` | [#15](https://github.com/majorgilles/transformer-2017-reproduction/issues/15) | Short GPU benchmark and scaled campaign choice |
@@ -81,7 +81,7 @@ The detailed milestone plan is in [`docs/roadmap.md`](docs/roadmap.md).
 
 ## Reproducibility boundary
 
-The existing data manifest and frozen tokenizer identify the corpus boundary. Training checkpoints should preserve the model, optimizer, mixed-precision scaler when used, training step, and random state needed to continue the bounded experiment. The checkpoint notebook will demonstrate a simple save/load and restart comparison; production retention managers and exhaustive identity graphs are not required.
+The existing data manifest and frozen tokenizer identify the corpus boundary. Training checkpoints should preserve the model, optimizer, mixed-precision scaler when used, training step, and random state needed to continue the bounded experiment. The checkpoint notebook demonstrates a minimal CPU save/load continuation; production restart orchestration, retention managers, and exhaustive identity graphs are not required.
 
 WMT text, private checkpoints, credentials, and caches remain local. If weights are published, inference artifacts remain separate from resumable training state.
 
