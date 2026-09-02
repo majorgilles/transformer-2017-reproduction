@@ -2,7 +2,7 @@
 
 A progressive, notebook-first reproduction of the encoder-decoder Transformer from [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), scaled for English-to-German training on one RTX 4070 SUPER.
 
-> **Status:** implementation in progress. Environment, WMT14 data loading, shared BPE, the complete Transformer model, objective/optimization mechanics, fixture training/validation, and minimal checkpoint resume are complete; GPU calibration is next.
+> **Status:** implementation in progress. Environment, WMT14 data loading, shared BPE, the complete Transformer model, training mechanics, checkpoint resume, and RTX 4070 SUPER calibration are complete; the canonical WMT training run is next.
 
 ## Why this repository exists
 

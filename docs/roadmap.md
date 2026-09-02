@@ -27,8 +27,8 @@ notebook 03. Issues #6–#10 are consolidated into #5 under ADR 0005.
 | Issue | Notebook | Exit evidence |
 | --- | --- | --- |
 | #11 | `04_objective_optimizer_batching.ipynb` | Label smoothing, Noam schedule, and a simple token-budget batch example; AMP only if needed |
-| #12 | `05_training_validation_cli.ipynb` | Minimal fresh-process train/validate command and learning curve |
-| #13 | `06_checkpoint_resume.ipynb` | Simple checkpoint save/load and short restart comparison |
+| #12 | `05_training_validation_cli.ipynb` | Minimal fixture train/validate functions and learning curve |
+| #13 | `06_checkpoint_resume.ipynb` | Simple checkpoint save/load and continuation |
 
 ## M3 — Canonical WMT experiment
 

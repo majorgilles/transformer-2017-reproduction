@@ -9,7 +9,7 @@ Source: Vaswani et al., [*Attention Is All You Need*](https://arxiv.org/abs/1706
 | Task | WMT14 English → German | English → German | Fixed | 01 |
 | Encoder depth | 6 layers | 6 layers | Fixed | 03 |
 | Decoder depth | 6 layers | 6 layers | Fixed | 03 |
-| Model width | `d_model=512` | Selected with a short single-GPU benchmark | May shrink; state the chosen value and parameter count | 07 |
+| Model width | `d_model=512` | `d_model=512`; 63,082,496 parameters in the selected model | Preserved after the RTX 4070 SUPER benchmark | 07 |
 | Feed-forward width | `d_ff=2048` | Default ratio `d_ff=4*d_model` | Ratio change needs evidence and HITL approval | 03, 07 |
 | Heads | `h=8`, `d_k=d_v=64` | Multi-head with `d_k=d_v=d_model/h` | Head count may scale; divisibility is mandatory | 03, 07 |
 | Attention math | `softmax(QKᵀ/√d_k)V` | Explicit tensor implementation | No fused SDPA in canonical path | 03 |
@@ -21,13 +21,13 @@ Source: Vaswani et al., [*Attention Is All You Need*](https://arxiv.org/abs/1706
 | Weight sharing | Source embedding, target embedding, and pre-softmax weights shared | Same when shared BPE vocabulary is valid | Any exception needs explicit evidence | 02, 03 |
 | Dropout | `P_drop=0.1`; sublayer output and embedding+position sum | Start at `0.1` | Change only during bounded experiments; freeze result | 03, 07 |
 | Vocabulary | Shared source-target BPE, about 37k | Shared BPE learned on approved training data only | Size may shrink based on sparsity/sequence evidence | 02 |
-| Training corpus | About 4.5M WMT14 pairs | 4,508,785 identified train pairs available; a smaller subset may be chosen after calibration | State the subset rule; do not inspect final-test text | 01, 14 |
-| Batching | Length-grouped; ~25k source and ~25k target tokens per batch | A readable token-budget batcher | Scale the budget to VRAM; sophisticated bucketing is optional | 04, 07 |
+| Training corpus | About 4.5M WMT14 pairs | First 4,000,000 approved training pairs whose tokenized source and complete target are each at most 256 positions | Fixed selection rule; do not inspect final-test text | 01, 07 |
+| Batching | Length-grouped; ~25k source and ~25k target tokens per batch | Length-grouped; at most 4,096 padded source and 4,096 padded target positions per batch | Frozen from the RTX 4070 SUPER benchmark | 04, 07 |
 | Optimizer | Adam, `β1=0.9`, `β2=0.98`, `ε=1e-9` | Same | Fixed unless a later ADR records deviation | 04 |
 | LR schedule | `d_model^-0.5 * min(step^-0.5, step*warmup^-1.5)` | Same formula | Fixed | 04 |
 | Warmup | 4,000 steps | 4,000 initial default | Change requires measured rationale and HITL approval | 04, 07 |
 | Label smoothing | `ε_ls=0.1` | `0.1` | Fixed | 04 |
-| Training duration | Base: 100k steps on 8×P100 | Token/step budget fitting 24–48 hours on one 4070 SUPER | Deliberately scaled and frozen after calibration | 07–08 |
+| Training duration | Base: 100k steps on 8×P100 | 400,000 optimizer steps; estimated 28.7 hours on one RTX 4070 SUPER, including a 15% overhead allowance | Frozen from measured 0.224-second synthetic steps; report actual elapsed time | 07–08 |
 | Mixed precision | Not part of the paper setup | Optional execution convenience if needed for the GPU budget | Demonstrate finite loss/gradients; elaborate scaler abstractions are unnecessary | 04–06 |
 | Development set | `newstest2013` | `newstest2013` acquired and sharded separately | Fixed | 01, 09 |
 | Test set | `newstest2014` | `newstest2014`, opened only after selection freeze | Fixed | 09 |
