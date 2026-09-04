@@ -38,7 +38,7 @@ CANONICAL_CAMPAIGN = CampaignConfig(
     max_sequence_length=256,
     dropout=0.1,
     token_budget_per_side=4_096,
-    training_examples=4_000_000,
+    training_examples=1_900_000,
     max_steps=400_000,
     warmup_steps=4_000,
     label_smoothing=0.1,
@@ -47,4 +47,3 @@ CANONICAL_CAMPAIGN = CampaignConfig(
     sample_max_new_tokens=64,
     runtime_overhead_multiplier=1.15,
 )
-

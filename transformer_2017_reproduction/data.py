@@ -3,7 +3,7 @@
 # %% auto #0
 __all__ = ['Split', 'WMT14_EN_DE_SOURCES', 'ParallelExample', 'CorpusSource', 'AcquisitionRecord', 'SourceProcessingRecord',
            'ShardRecord', 'DatasetManifest', 'serialize_examples', 'download_archive', 'extract_parallel_source',
-           'shard_parallel_source', 'manifest_as_bytes', 'write_manifest', 'load_manifest', 'prepare_wmt14_en_de',
+           'shard_parallel_source', 'manifest_as_bytes', 'write_manifest', 'load_manifest', 'prepare_europarl_en_de',
            'load_shard', 'iter_manifest_examples', 'iter_bpe_training_text', 'main']
 
 # %% ../notebooks/01_data_contracts_provenance.ipynb #contracts-code-01
@@ -114,22 +114,6 @@ WMT14_EN_DE_SOURCES: Final[tuple[CorpusSource, ...]] = (
         archive_filename="training-parallel-europarl-v7.tgz",
         source_member="training/europarl-v7.de-en.en",
         target_member="training/europarl-v7.de-en.de",
-    ),
-    CorpusSource(
-        name="commoncrawl",
-        split="train",
-        url="https://statmt.org/wmt13/training-parallel-commoncrawl.tgz",
-        archive_filename="training-parallel-commoncrawl.tgz",
-        source_member="commoncrawl.de-en.en",
-        target_member="commoncrawl.de-en.de",
-    ),
-    CorpusSource(
-        name="news-commentary-v9",
-        split="train",
-        url="https://statmt.org/wmt14/training-parallel-nc-v9.tgz",
-        archive_filename="training-parallel-nc-v9.tgz",
-        source_member="training/news-commentary-v9.de-en.en",
-        target_member="training/news-commentary-v9.de-en.de",
     ),
     CorpusSource(
         name="newstest2013",
@@ -357,8 +341,8 @@ def load_manifest(path: Path) -> DatasetManifest:
     return DatasetManifest.model_validate_json(path.read_bytes())
 
 
-def prepare_wmt14_en_de(root: Path, shard_size: int = 100_000) -> DatasetManifest:
-    """Acquire and shard all approved WMT14 English-German train/development data."""
+def prepare_europarl_en_de(root: Path, shard_size: int = 100_000) -> DatasetManifest:
+    """Acquire and shard Europarl training plus newstest2013 development data."""
 
     archive_dir = root / "raw" / "archives"
     extracted_dir = root / "raw" / "parallel"
@@ -391,7 +375,7 @@ def prepare_wmt14_en_de(root: Path, shard_size: int = 100_000) -> DatasetManifes
 
     manifest = DatasetManifest(
         schema_version=1,
-        dataset_name=f"wmt14-en-de-shard-{shard_size}",
+        dataset_name=f"europarl-en-de-shard-{shard_size}",
         source_language="en",
         target_language="de",
         shard_size=shard_size,
@@ -440,15 +424,15 @@ def iter_bpe_training_text(root: Path, manifest: DatasetManifest) -> Iterator[st
 
 # %% ../notebooks/01_data_contracts_provenance.ipynb #cli-code-01
 def main(argv: Sequence[str] | None = None) -> int:
-    """Run the complete WMT14 English-German acquisition and sharding pipeline."""
+    """Run the Europarl English-German acquisition and sharding pipeline."""
 
     parser = argparse.ArgumentParser(description=main.__doc__)
-    parser.add_argument("--root", default="data/wmt14_en_de")
+    parser.add_argument("--root", default="data/europarl_en_de")
     parser.add_argument("--shard-size", type=int, default=100_000)
     args = parser.parse_args(argv)
     root = Path(cast(str, args.root))
     shard_size = cast(int, args.shard_size)
-    manifest = prepare_wmt14_en_de(root, shard_size)
+    manifest = prepare_europarl_en_de(root, shard_size)
     manifest_path = root / "manifests" / f"{manifest.dataset_name}.json"
     report = {
         "manifest": manifest_path.as_posix(),

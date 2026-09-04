@@ -2,7 +2,7 @@
 
 A progressive, notebook-first reproduction of the encoder-decoder Transformer from [*Attention Is All You Need*](https://arxiv.org/abs/1706.03762), scaled for English-to-German training on one RTX 4070 SUPER.
 
-> **Status:** implementation in progress. Environment, WMT14 data loading, shared BPE, the complete Transformer model, training mechanics, checkpoint resume, and RTX 4070 SUPER calibration are complete; the canonical WMT training run is next.
+> **Status:** implementation in progress. Environment, data loading, shared BPE, the complete Transformer model, training mechanics, checkpoint resume, and RTX 4070 SUPER calibration are complete; an Europarl-only control campaign is next under ADR 0006.
 
 ## Why this repository exists
 
@@ -63,7 +63,7 @@ During an ordinary concept notebook, run only the proportional checks relevant t
 | Step | Notebook | GitHub issue | Deliverable |
 | ---: | --- | --- | --- |
 | 00 | `00_environment_contract.ipynb` | [#1](https://github.com/majorgilles/transformer-2017-reproduction/issues/1) | Locked Windows/CUDA/nbdev toolchain and diagnostics |
-| 01 | `01_data_contracts_provenance.ipynb` | [#2](https://github.com/majorgilles/transformer-2017-reproduction/issues/2) | Complete WMT14 train/dev acquisition, immutable shards, manifests, and loaders |
+| 01 | `01_data_contracts_provenance.ipynb` | [#2](https://github.com/majorgilles/transformer-2017-reproduction/issues/2) | Europarl train / `newstest2013` development acquisition, immutable shards, manifests, and loaders |
 | 02 | `02_shared_bpe.ipynb` | [#3](https://github.com/majorgilles/transformer-2017-reproduction/issues/3) | Shared BPE tokenizer with stable identity |
 | 03 | `03_transformer.ipynb` | [#5](https://github.com/majorgilles/transformer-2017-reproduction/issues/5) | Complete Transformer mechanics, tiny overfit, and greedy output; consolidates #4–#10 |
 | 04 | `04_objective_optimizer_batching.ipynb` | [#11](https://github.com/majorgilles/transformer-2017-reproduction/issues/11) | Label smoothing, Noam schedule, and simple token-budget batching |

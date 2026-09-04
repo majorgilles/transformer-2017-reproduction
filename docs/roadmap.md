@@ -10,7 +10,7 @@ beside the real encoder/decoder path that consumes it. See
 | Issue | Notebook | Exit evidence |
 | --- | --- | --- |
 | #1 | `00_environment_contract.ipynb` | Runnable locked environment and visible CUDA diagnostics |
-| #2 | `01_data_contracts_provenance.ipynb` | Reusable WMT14 train/dev loader and visible fixture |
+| #2 | `01_data_contracts_provenance.ipynb` | Reusable Europarl train / `newstest2013` development loader and visible fixture |
 | #3 | `02_shared_bpe.ipynb` | Shared BPE model, round trips, and vocabulary evidence |
 
 ## M1 — Complete Transformer from first principles
@@ -30,7 +30,7 @@ notebook 03. Issues #6–#10 are consolidated into #5 under ADR 0005.
 | #12 | `05_training_validation_cli.ipynb` | Minimal fixture train/validate functions and learning curve |
 | #13 | `06_checkpoint_resume.ipynb` | Simple checkpoint save/load and continuation |
 
-## M3 — Canonical WMT experiment
+## M3 — Europarl-only control experiment
 
 Issue #14 remains superseded by #2 under ADR 0003; it has no notebook.
 

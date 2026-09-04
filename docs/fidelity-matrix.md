@@ -21,13 +21,13 @@ Source: Vaswani et al., [*Attention Is All You Need*](https://arxiv.org/abs/1706
 | Weight sharing | Source embedding, target embedding, and pre-softmax weights shared | Same when shared BPE vocabulary is valid | Any exception needs explicit evidence | 02, 03 |
 | Dropout | `P_drop=0.1`; sublayer output and embedding+position sum | Start at `0.1` | Change only during bounded experiments; freeze result | 03, 07 |
 | Vocabulary | Shared source-target BPE, about 37k | Shared BPE learned on approved training data only | Size may shrink based on sparsity/sequence evidence | 02 |
-| Training corpus | About 4.5M WMT14 pairs | First 4,000,000 approved training pairs whose tokenized source and complete target are each at most 256 positions | Fixed selection rule; do not inspect final-test text | 01, 07 |
+| Training corpus | About 4.5M WMT14 pairs | 1,900,000 eligible Europarl v7 pairs per streamed pass | Deliberate homogeneous-corpus control under ADR 0006; do not inspect final-test text | 01, 07 |
 | Batching | Length-grouped; ~25k source and ~25k target tokens per batch | Length-grouped; at most 4,096 padded source and 4,096 padded target positions per batch | Frozen from the RTX 4070 SUPER benchmark | 04, 07 |
 | Optimizer | Adam, `β1=0.9`, `β2=0.98`, `ε=1e-9` | Same | Fixed unless a later ADR records deviation | 04 |
 | LR schedule | `d_model^-0.5 * min(step^-0.5, step*warmup^-1.5)` | Same formula | Fixed | 04 |
 | Warmup | 4,000 steps | 4,000 initial default | Change requires measured rationale and HITL approval | 04, 07 |
 | Label smoothing | `ε_ls=0.1` | `0.1` | Fixed | 04 |
-| Training duration | Base: 100k steps on 8×P100 | 400,000 optimizer steps; estimated 28.7 hours on one RTX 4070 SUPER, including a 15% overhead allowance | Frozen from measured 0.224-second synthetic steps; report actual elapsed time | 07–08 |
+| Training duration | Base: 100k steps on 8×P100 | 400,000 optimizer steps; estimated 29.1 hours on one RTX 4070 SUPER, including a 15% overhead allowance | Frozen from measured 0.228-second synthetic steps; report actual elapsed time | 07–08 |
 | Mixed precision | Not part of the paper setup | Optional execution convenience if needed for the GPU budget | Demonstrate finite loss/gradients; elaborate scaler abstractions are unnecessary | 04–06 |
 | Development set | `newstest2013` | `newstest2013` acquired and sharded separately | Fixed | 01, 09 |
 | Test set | `newstest2014` | `newstest2014`, opened only after selection freeze | Fixed | 09 |
