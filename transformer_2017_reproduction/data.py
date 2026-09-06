@@ -4,7 +4,7 @@
 __all__ = ['Split', 'WMT14_EN_DE_SOURCES', 'ParallelExample', 'CorpusSource', 'AcquisitionRecord', 'SourceProcessingRecord',
            'ShardRecord', 'DatasetManifest', 'serialize_examples', 'download_archive', 'extract_parallel_source',
            'shard_parallel_source', 'manifest_as_bytes', 'write_manifest', 'load_manifest', 'prepare_europarl_en_de',
-           'load_shard', 'iter_manifest_examples', 'iter_bpe_training_text', 'main']
+           'load_shard', 'iter_manifest_examples', 'iter_bpe_training_text', 'derive_europarl_heldout_manifest', 'main']
 
 # %% ../notebooks/01_data_contracts_provenance.ipynb #contracts-code-01
 import argparse
@@ -28,7 +28,7 @@ from transformer_2017_reproduction.identity import (
     sha256_file as _sha256_file,
 )
 
-Split = Literal["train", "development"]
+Split = Literal["train", "development", "development_europarl"]
 
 
 class ParallelExample(BaseModel):
@@ -421,6 +421,75 @@ def iter_bpe_training_text(root: Path, manifest: DatasetManifest) -> Iterator[st
     for example in iter_manifest_examples(root, manifest, "train"):
         yield example.source_text
         yield example.target_text
+
+
+def derive_europarl_heldout_manifest(
+    root: Path,
+    manifest: DatasetManifest,
+    *,
+    held_out_start: int,
+) -> DatasetManifest:
+    """Move the tail of the training stream into a `development_europarl` split.
+
+    `held_out_start` is the number of training pairs, in stream order, that stay
+    in `train`. Shards entirely before that boundary are reused unchanged. The
+    shard containing it is split into an immutable head shard (train) and an
+    immutable held-out shard. Any later training shards move whole. The result
+    is a second manifest beside the original; both remain valid.
+    """
+
+    if held_out_start < 1:
+        raise ValueError("held_out_start must be positive")
+
+    shard_root = f"processed/shards-{manifest.shard_size}"
+    train_records: list[ShardRecord] = []
+    held_out_records: list[ShardRecord] = []
+    consumed = 0
+
+    for record in manifest.shards:
+        if record.split != "train":
+            continue
+        start, end = consumed, consumed + record.example_count
+        consumed = end
+        if end <= held_out_start:
+            train_records.append(record)
+            continue
+
+        examples = load_shard(root, record)
+        stem = Path(record.relative_path).stem
+        boundary = max(held_out_start - start, 0)
+        if boundary:
+            train_records.append(
+                _write_immutable_shard(
+                    root,
+                    f"{shard_root}/train/{stem}-head.jsonl",
+                    split="train",
+                    source_name=record.source_name,
+                    examples=examples[:boundary],
+                )
+            )
+        held_out_records.append(
+            _write_immutable_shard(
+                root,
+                f"{shard_root}/development_europarl/{stem}-heldout.jsonl",
+                split="development_europarl",
+                source_name=record.source_name,
+                examples=examples[boundary:],
+            )
+        )
+
+    if not held_out_records:
+        raise ValueError("held_out_start leaves no training pairs to hold out")
+
+    other_records = [record for record in manifest.shards if record.split != "train"]
+    derived = manifest.model_copy(
+        update={
+            "dataset_name": f"{manifest.dataset_name}-heldout",
+            "shards": tuple(train_records + other_records + held_out_records),
+        }
+    )
+    write_manifest(root, derived)
+    return derived
 
 # %% ../notebooks/01_data_contracts_provenance.ipynb #cli-code-01
 def main(argv: Sequence[str] | None = None) -> int:

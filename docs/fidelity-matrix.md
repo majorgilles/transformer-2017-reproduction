@@ -33,7 +33,7 @@ Source: Vaswani et al., [*Attention Is All You Need*](https://arxiv.org/abs/1706
 | Test set | `newstest2014` | `newstest2014`, opened only after selection freeze | Fixed | 09 |
 | Beam decoding | Beam 4, length penalty `α=0.6`, max output `input+50` | Paper settings are the canonical evaluation starting point | Changes use development data and freeze before test | 09 |
 | Checkpoint choice | Average last 5 base checkpoints | Use the best development checkpoint; averaging is optional | Freeze the simple rule before final-test access | 08–09 |
-| Initialization | Not specified precisely in the paper text | Explicit project choice with statistical tests | Never describe as paper-faithful without a source | 03 |
+| Initialization | Not specified precisely in the paper text | Xavier-uniform on projections; tied embedding normal with std `d_model**-0.5` per the reference implementation (ADR 0007) | Never describe as paper-faithful without a source; source dependence is measured at every evaluation | 03, 08 |
 | Public inference | Not applicable | Optional minimal package and demo | Must not complicate the core model; publication remains subject to source-rights review | 10–11 |
 
 ## Evidence rule
